@@ -1,0 +1,141 @@
+\documentclass{article}
+
+\setcounter{page}{1}
+\setlength{\oddsidemargin}{0.in}
+\setlength{\evensidemargin}{0.in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.5in}
+\setlength{\headheight}{0.17in}
+\setlength{\headsep}{0.35in}
+\setlength{\textheight}{9.in}
+\setlength{\parindent}{0in}
+\setlength{\parskip}{.1in}
+\usepackage[T1]{fontenc}
+\usepackage[round]{natbib}
+\bibliographystyle{sysbio}
+\usepackage[fleqn]{amsmath}
+\usepackage{amssymb}
+\usepackage{xspace}
+\usepackage{verbatim}
+\usepackage{textcomp}
+\usepackage{paralist}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{backref, urlcolor=blue, linkcolor=blue, citecolor=blue,  colorlinks=true}
+
+% use the fancyhdr package to allow both headers and footers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % clear all headers and footers
+\fancyhead[RO,LE]{SNAPP: Species Trees and Species Delimitation}
+% \fancyhead[RO,LE]{2012}
+\fancyfoot[LO,LE]{\footnotesize 2018 Workshop on Population and Speciation Genomics, \v{C}esk\'y Krumlov}
+\fancyfoot[CE,CO]{}
+\fancyfoot[RO,RE]{\thepage}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% \floatstyle{boxed}
+% \restylefloat{figure}
+% \restylefloat{table}
+\newfloat{textbox}{hptb}{lotb}
+\floatname{textbox}{Box}
+
+\newcommand{\execmd}[1]{\texttt{#1}\\}
+\newcommand{\cmdopt}[1]{\texttt{#1}\xspace}
+\newcommand{\cmd}[1]{\texttt{#1}\xspace}
+\newcommand{\localfile}[1]{\textsf{#1}\xspace}
+\newcommand{\QandA}[2]{\textit{#1}\footnote{#2}\xspace}
+\newcommand{\todo}[1]{{\color{red}TODO: {#1}}\xspace}
+\newcommand{\menutab}[1]{\textbf{\textit{#1}}\xspace}
+\newcommand{\subItem}[2]{\menutab{#1}$\rightarrow$\menutab{#2}\xspace}
+\newcommand{\subsubItem}[3]{\menutab{#1}$\rightarrow$\menutab{#2}$\rightarrow$\menutab{#3}\xspace}
+\newcommand{\plusbutton}{``$\boldsymbol{+}$''\xspace}
+\newcommand{\taxonset}[1]{{\bfseries\sffamily #1}\xspace}
+\newcommand{\field}[1]{\texttt{#1}\xspace}
+\newcommand{\fieldvalue}[1]{{\bfseries\sffamily #1}\xspace}
+\newcommand{\questionfont}[1]{{\bfseries\sffamily\textit{#1}}\xspace}
+\newcommand{\question}[1]{{\questionfont{#1}\\\vspace{2cm}}\xspace}
+
+
+\begin{document}
+{\Large\bf Species Trees and Species Delimitation with \texttt{SNAPP}: A Tutorial and Worked Example}\\
+\\
+Adam D. Leach\'e\\
+Department of Biology, University of Washington, Seattle, United States\\
+Burke Museum of Natural History and Culture, Seattle, United States
+
+Remco R. Bouckaert\\
+Centre for Computational Evolution, University of Auckland, Auckland, New Zealand\\
+Max Planck Institute for the Science of Human History, Jena, Germany
+
+\textit{Updated for the 2018 Workshop on Population and Speciation Genomics by Huw Ogilvie, who you should blame for anything that is wrong or that doesn't make sense...}
+
+{\singlespacing \tableofcontents}
+\newpage
+%###########################################################################################
+\section{Objective}
+This tutorial will help you become familiar with conducting species tree inference and species delimitation in a Bayesian framework using biallelic markers (AFLP or SNP data) with \texttt{SNAPP}.
+You be using example SNP data from \textit{Hemidactylus} geckos with the implementation of \texttt{SNAPP} available for the \href{http://beast2.org/}{\texttt{BEAST 2}} platform \citep{bouckaert14}.
+The tutorial includes instructions for installing the required packages on your computer, setting up the XML file, and testing species delimitation models using marginal likelihood estimation and Bayes factors.
+
+A secondary goal is to provide guidance on how to make informed choices concerning the priors and other settings in \verb8SNAPP8. It is deceptively easy (and often enticing) to run the program with default settings and to ignore the biological meanings of the various priors and settings, but this is dangerous and typically leads to inaccurate results. Comparing marginal likelihood estimates obtained from ``default'' versus ``realistic'' settings can be dramatic, and can lead to different rankings of species delimitation models (even in cases where the species tree topologies look similar).
+
+\section{Version, Author information, and Acknowledgements}
+This tutorial was mostly written by Adam Leach\'e and Remco Bouckaert. David Bryant, Jamie Oaks, and CJ Battey helped troubleshoot the tutorial.
+The layout of the tutorial is a modified version of a \href{http://phyletica.org/teaching/uw-biol-449/div-time-estimation/}{divergence time tutorial} written by Jamie Oaks, which he borrowed from Tracy Heath. 
+This work is licensed under a \href{http://creativecommons.org/licenses/by/4.0/deed.en_US}{Creative Commons Attribution 4.0 International License.}
+
+\section{Background Information}
+Most coalescent methods for estimating species trees are multilocus methods, which explicitly model a separate gene tree for each locus. Methods such as \texttt{StarBEAST2} \citep{Ogilvie:2017bf} and \texttt{BPP} \citep{Rannala:2017gs} jointly infer the species tree and the coalescent history of each gene, but are difficult to scale up for use with hundreds or thousands of loci. An alternative is to use a method such as \texttt{ASTRAL} \citep{Mirarab01092014, Mirarab15062015, ASTRALIII} which uses previously computed gene tree topologies as input, but this class of methods cannot be used to estimate species divergence times, population sizes or to infer the root absent an outgroup.
+
+\texttt{SNAPP} is a method which estimates species trees directly from biallelic markers (e.g., SNP or AFLP data), bypassing the necessity of having to explicitly integrate or sample the gene trees at each locus. The method works by estimating the probability of allele frequency change across ancestor/descendent nodes. The result is a posterior distribution for the species tree, species divergence times, and effective population sizes, all obtained without the estimation of gene trees. The method works well for relatively small numbers of species (the maximum is probably near 20 due to computational constraints).
+
+Incorporating coalescent analysis into studies of species delimitation is now standard practice. Comparing candidate species delimitation models that contain different numbers of species, or different allocations of populations to species, is relatively easy in a Bayesian framework. The general approach is to estimate the marginal likelihood \citep{baele12} of each competing species delimitation model, rank models by marginal likelihood, and use Bayes factors \citep{kass95} to assess support for model rankings. This approach, called Bayes factor delimitation (BFD), was first implemented by \citet{Grummer13} with DNA sequences in the program \texttt{*BEAST}. The approach was modified to work with SNP data (BFD*) using the program \texttt{SNAPP} \citep{Leache14}.
+
+BFD* estimates the species tree and evaluates the species delimitation model at the same time, while allowing the user to compare models that contain different numbers of species and different assignments of samples to species. This is useful when the goal is to compare predefined species delimitation models or competing taxonomies. However, one drawback is that the user needs to predefine the number of species and sample assignments. This prevents the method from searching among all possible species assignments, an obvious disadvantage for studies aiming to discover cryptic diversity. Another major limitation is that the method does not explicitly consider gene flow, isolation by distance, selection, or several other important biological processes; however, these limitations are shared by many current methods. For example, failing to sample admixed populations often favors models containing more species, whereas including admixed populations will support more models containing fewer species. Distinguishing among these problematic scenarios requires paying close attention to both sample selection and prior settings. Finally, when evaluating results, remember to consider other aspects of the biology, ecology, and geography of ``species'' before jumping to conclusions.
+
+\section{Programs Used in This Tutorial}
+You will use the free, open-source phylogenetics platform \texttt{BEAST 2} (Bayesian
+Evolutionary Analysis Sampling Trees;
+\href{http://beast2.org}{\url{http://beast2.org}}), for
+estimating species trees.
+\texttt{BEAST} comes with several utility programs including \texttt{BEAUTi}, which you will use to manage package plugins (also called add-ons), and \texttt{TreeAnnotator}, for summarizing output files.
+You will also be using the programs \texttt{Tracer}
+(\href{http://tree.bio.ed.ac.uk/software/tracer}{\url{http://tree.bio.ed.ac.uk/software/tracer}})
+and \texttt{FigTree}
+(\href{http://tree.bio.ed.ac.uk/software/figtree}{\url{http://tree.bio.ed.ac.uk/software/figtree}})
+for evaluating, summarizing, and viewing results.
+
+\section{The Data}
+You will be analyzing SNP data for geckos in the \textit{Hemidactylus fasciatus} species complex. Details on how the data were collected are 
+provided in \cite{Leache14}. For this tutorial, we will use a data matrix containing 129 SNPs that is also available for download on \href{http://datadryad.org/resource/doi:10.5061/dryad.r55fb}{Dryad}. Allopatric divergence seems to be the primary mechanism causing speciation in this group. These geckos are restricted to rainforest habitats, and their distributions match those of the major blocks of rainforest in West and Central Africa (Figure \ref{fig:map}). 
+
+For this species delimitation example, you will test models based on historical connections between adjacent rainforest blocks. These models differ in the number of species, and how samples are assigned to species. The base model has four species (Figure \ref{fig:map}a). The alternative models are grouped into three classes: (1) lumping: populations are collapsed into the same species, (2) splitting: populations are partitioned into separate species, (3) reassigning: population(s) are allocated into a different species.
+
+    \begin{figure}[htbp]
+        \centering
+        \fbox{\includegraphics[width=0.8\textwidth]{images/map.png}}
+        \caption{Geographic sampling of geckos (numbers in symbols indicate sample sizes). Starting taxonomy is shown in (a). BFD* is used to test the alternative species delimitation models outlined in (b) -- (g).}
+        \label{fig:map}
+    \end{figure}
+
+\section{Tutorial}
+\newcounter{stepCounter}
+\newcommand{\step}[2]{\addtocounter{stepCounter}{1} {\bf \hypertarget{step\arabic{stepCounter}}{Step \arabic{stepCounter}:}}\xspace #2\par}
+\newcommand{\intermediate}[1]{#1}
+\input{BFD-tutorial-steps.tex}
+
+\section{Additional Information/Resources}
+Other resources for \texttt{BEAST} and \texttt{SNAPP} are available on the web page \href{https://www.beast2.org/snapp/}{https://www.beast2.org/snapp/}.
+
+\newpage
+\bibliography{references}
+
+\end{document}
+

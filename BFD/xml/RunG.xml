@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='SNAPP' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" required="SNAPP v1.3.0" version="2.4">
+
+
+    <data
+id="smallhemi129"
+dataType="integer"
+name="rawdata">
+                    <sequence id="seq_coal_CA1_5" taxon="coal_CA1_5" totalcount="3" value="120202022020102220222220222110222022202202202000220022120220220020221100212020202122012200202200002220122020222120202210200220202"/>
+                    <sequence id="seq_coal_CG_6" taxon="coal_CG_6" totalcount="3" value="220202022020202220222222222121222022212202202000220022120220220020220210201020202122022200202220202220122010222220202220200220102"/>
+                    <sequence id="seq_coal_GA_26" taxon="coal_GA_26" totalcount="3" value="22020222202020222022200022202022200221-2022020202200220121202200102202202020202221220222002022002022-0022020222220102220200220202"/>
+                    <sequence id="seq_eng_CA2_20" taxon="eng_CA2_20" totalcount="3" value="22222222022020222022202022000022202220-222202220020212022222022202200220202222000202020022200002222222002020202202220222210220202"/>
+                    <sequence id="seq_eng_EG_21" taxon="eng_EG_21" totalcount="3" value="220102222020202220202-00222-00222222122202202001221022020220220022220200202020201122022200102200000200022-20222220202222200220202"/>
+                    <sequence id="seq_eng_EG_22" taxon="eng_EG_22" totalcount="3" value="220002222020222220212200222000222222222202202000211021021220220022220222202020200212022200002200001100022020221220202222100221202"/>
+                    <sequence id="seq_eng_NG_18" taxon="eng_NG_18" totalcount="3" value="210202212010212220222200022-012222221222021020022200220212-0220022020200202020102121022200-12200001200012020222220202222200220202"/>
+                    <sequence id="seq_fas_GH1_12" taxon="fas_GH1_12" totalcount="3" value="222222220220202220222020220000212022202222202220020222022222022202200220202222000022020022201002222222000020202202220222200220202"/>
+                    <sequence id="seq_fas_GH2_10" taxon="fas_GH2_10" totalcount="3" value="222222220220202-20222020220000212022202222202220020222022222022202200220202222000022020022200002222222001020202202220222210220202"/>
+                    <sequence id="seq_fas_GH2_11" taxon="fas_GH2_11" totalcount="3" value="2222222202212022202220202200002-2022202222202220020222022222022202200220202222000122020022200002222222000020202202220222210220202"/>
+                    <sequence id="seq_fas_GH4_38" taxon="fas_GH4_38" totalcount="3" value="2222222202212022202220202200002-2022202222202220020222022222022202200220202222000022020022200002222222000020202202220222210220202"/>
+                    <sequence id="seq_fas_GH4_39" taxon="fas_GH4_39" totalcount="3" value="222222220221202-202220202200002-2022202222202220020222022222022202200220202212000022020022200002222222000020202202220222210220202"/>
+                    <sequence id="seq_fas_GH4_40" taxon="fas_GH4_40" totalcount="3" value="222222220220202220222020220000212022202222202220020222022222022202200220202222000022020022200002222222000020202202220222210220202"/>
+                    <sequence id="seq_kya_GH3_7" taxon="kya_GH3_7" totalcount="3" value="222222220220202220222020220000221022212222202220020222022222022202200220202222000202020022200002222222002020202202220222210220202"/>
+                    <sequence id="seq_kya_GH3_8" taxon="kya_GH3_8" totalcount="3" value="222222220220202220222020220000222022202222202220020222022222022202200220202222000102020022200002222222002020202202220222210220202"/>
+                    <sequence id="seq_kya_GH3_9" taxon="kya_GH3_9" totalcount="3" value="22222222022020222022202022000022202-202222202220020222022222021202200220202222000202020022200002222222002020202202221222210220202"/>
+                </data>
+
+
+    
+
+
+    
+
+
+    
+<map name="Uniform" >beast.math.distributions.Uniform</map>
+<map name="Exponential" >beast.math.distributions.Exponential</map>
+<map name="LogNormal" >beast.math.distributions.LogNormalDistributionModel</map>
+<map name="Normal" >beast.math.distributions.Normal</map>
+<map name="Beta" >beast.math.distributions.Beta</map>
+<map name="Gamma" >beast.math.distributions.Gamma</map>
+<map name="LaplaceDistribution" >beast.math.distributions.LaplaceDistribution</map>
+<map name="prior" >beast.math.distributions.Prior</map>
+<map name="InverseGamma" >beast.math.distributions.InverseGamma</map>
+<map name="OneOnX" >beast.math.distributions.OneOnX</map>
+
+
+<run id="mcmc" spec="MCMC" chainLength="1000" storeEvery="10">
+    <state id="state" storeEvery="1000">
+        <stateNode id="Tree.smallhemi129" spec="beast.util.ClusterTree" clusterType="upgma" nodetype="snap.NodeData">
+            <taxa id="snap.smallhemi129" spec="snap.Data" dataType="integerdata">
+                <rawdata idref="smallhemi129"/>
+                <taxonset id="kya" spec="TaxonSet">
+                    <taxon id="kya_GH3_7" spec="Taxon"/>
+                    <taxon id="kya_GH3_8" spec="Taxon"/>
+                    <taxon id="kya_GH3_9" spec="Taxon"/>
+                </taxonset>
+                <taxonset id="coal" spec="TaxonSet">
+                    <taxon id="coal_CA1_5" spec="Taxon"/>
+                    <taxon id="coal_CG_6" spec="Taxon"/>
+                    <taxon id="coal_GA_26" spec="Taxon"/>
+                    <taxon id="eng_EG_21" spec="Taxon"/>
+                    <taxon id="eng_EG_22" spec="Taxon"/>
+                </taxonset>
+                <taxonset id="fas" spec="TaxonSet">
+                    <taxon id="fas_GH1_12" spec="Taxon"/>
+                    <taxon id="fas_GH2_10" spec="Taxon"/>
+                    <taxon id="fas_GH2_11" spec="Taxon"/>
+                    <taxon id="fas_GH4_38" spec="Taxon"/>
+                    <taxon id="fas_GH4_39" spec="Taxon"/>
+                    <taxon id="fas_GH4_40" spec="Taxon"/>
+                </taxonset>
+                <taxonset id="eng" spec="TaxonSet">
+                    <taxon id="eng_CA2_20" spec="Taxon"/>
+                    <taxon id="eng_NG_18" spec="Taxon"/>
+                </taxonset>
+            </taxa>
+            <parameter id="RealParameter.0" lower="0.0" name="clock.rate" upper="0.0">1.0</parameter>
+        </stateNode>
+        <parameter id="lambda" lower="0.0" name="stateNode">10.0</parameter>
+        <parameter id="coalescenceRate" name="stateNode">10.0</parameter>
+    </state>
+
+    <distribution id="posterior" spec="util.CompoundDistribution">
+        <distribution id="prior" spec="util.CompoundDistribution">
+            <prior id="lambdaPrior.smallhemi129" name="distribution" x="@lambda">
+                <Gamma id="Gamma.0" name="distr">
+                    <parameter id="RealParameter.1" estimate="false" name="alpha">2.0</parameter>
+                    <parameter id="RealParameter.2" estimate="false" name="beta">200.0</parameter>
+                </Gamma>
+            </prior>
+            <distribution id="snapprior.smallhemi129" spec="snap.likelihood.SnAPPrior" coalescenceRate="@coalescenceRate" lambda="@lambda" rateprior="gamma" tree="@Tree.smallhemi129">
+                <parameter id="alpha" estimate="false" lower="0.0" name="alpha">1.0</parameter>
+                <parameter id="beta" estimate="false" lower="0.0" name="beta">250.0</parameter>
+                <parameter id="kappa" estimate="false" lower="0.0" name="kappa">1.0</parameter>
+            </distribution>
+        </distribution>
+        <distribution id="likelihood" spec="util.CompoundDistribution">
+            <distribution id="treeLikelihood.smallhemi129" spec="snap.likelihood.SnAPTreeLikelihood" data="@snap.smallhemi129" non-polymorphic="false" pattern="coalescenceRate" tree="@Tree.smallhemi129">
+                <siteModel id="MutationSiteModel.smallhemi129" spec="SiteModel">
+                    <parameter id="mutationRate" estimate="false" name="mutationRate">1.0</parameter>
+                    <parameter id="shape" estimate="false" name="shape">2.0</parameter>
+                    <parameter id="proportionInvariant" estimate="false" name="proportionInvariant">0.0</parameter>
+                    <substModel id="MutationModel" spec="snap.likelihood.SnapSubstitutionModel" coalescenceRate="@coalescenceRate">
+                        <parameter id="u" estimate="false" lower="0.0" name="mutationRateU">1.0</parameter>
+                        <parameter id="v" lower="0.0" name="mutationRateV">1.0</parameter>
+                    </substModel>
+                </siteModel>
+            </distribution>
+        </distribution>
+    </distribution>
+
+    <operator id="NodeSwapper" spec="snap.operators.NodeSwapper" tree="@Tree.smallhemi129" weight="0.5"/>
+
+    <operator id="NodeBudger" spec="snap.operators.NodeBudger" size="0.5" tree="@Tree.smallhemi129" weight="0.5"/>
+
+    <operator id="TreeScaler" spec="snap.operators.ScaleOperator" scaleFactor="0.25" tree="@Tree.smallhemi129" weight="0.5"/>
+
+    <operator id="GammaMover" spec="snap.operators.GammaMover" coalescenceRate="@coalescenceRate" scale="0.5" weight="8.0"/>
+
+    <operator id="RateMixer" spec="snap.operators.RateMixer" coalescenceRate="@coalescenceRate" scaleFactors="0.25" tree="@Tree.smallhemi129" weight="1.0"/>
+
+    <operator id="lambdaScaler" spec="snap.operators.ScaleOperator" parameter="@lambda" scaleFactor="0.75" weight="1.0"/>
+
+    <logger id="tracelog" fileName="RunG.log" logEvery="10" model="@posterior">
+        <log idref="posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+        <log id="ThetaLogger" spec="snap.ThetaLogger" coalescenceRate="@coalescenceRate"/>
+        <log id="TreeHeightLogger" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.smallhemi129"/>
+    </logger>
+
+    <logger id="screenlog" logEvery="10">
+        <log idref="posterior"/>
+        <log id="ESS.0" spec="util.ESS" arg="@posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+    </logger>
+
+    <logger id="treelog" fileName="RunG.trees" logEvery="10" mode="tree">
+        <log id="TreeWithMetaDataLogger.smallhemi129" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.smallhemi129">
+            <metadata id="theta" spec="snap.RateToTheta" coalescenceRate="@coalescenceRate"/>
+        </log>
+    </logger>
+
+</run>
+
+</beast>
