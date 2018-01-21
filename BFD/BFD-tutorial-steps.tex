@@ -100,7 +100,7 @@
 
 \step{Import the SNP data.}{
     Import the SNP data (the {\bf smallhemi129.nex} file)
-    using the drop-down menu \subItem{File}{Import Alignment.}
+    using the drop-down menu \subItem{File}{Import Alignment} or \subItem{File}{Add Alignment} (the exact name depends on your operating system).
     Once the data are successfully loaded into \texttt{BEAUTi} you should see a list of the 
     samples included in the data file (Figure~\ref{fig:beauti-data-imported}.)
 
@@ -171,7 +171,7 @@
     different if \texttt{SNAPP} assumes that all constant sites have been removed. The example dataset for this tutorial, like typical SNP datasets, only includes variable site so make sure that the box is not checked.
     
     The ``Mutation Only At Root'' checkbox indicates conditioning on zero mutations, except at root (default false). As a result, all gene 
-    trees will coalesce in the root only, and never in any of the branches. This option is allows you to emulate the model used by \citet{nielsen1998} and \citet{roychoudhury2008}.
+    trees will coalesce in the root only, and never in any of the branches. This option allows you to emulate the model used by \citet{nielsen1998} and \citet{roychoudhury2008}.
     
     The ``Show Pattern Likelihoods And Quit'' checkbox is handy if you just want to print out the likelihoods for all patterns in the starting state and then quit.
     
@@ -291,6 +291,7 @@ We need to change some of the settings for this tutorial:
        \item[Alpha:]{Changing this can help -- or hurt -- the efficiency of the numerical integration of the marginal likelihood, leave at the default.}
        \item[Nr Of Steps:]{The number of steps to use, more is better but slower. Change to 12.}
        \item[rootdir:]{Folder for storing output. Change to the \textbf{full} path of the ``RunA'' folder you created earlier. For example, on my computer this is ``/home/me/Documents/beast-docs/BFD/RunA'' (without the quote marks).}
+       \item[Chain Length:]{The length of each chain for each step. Change it to 1000. Longer is better, but 1000 steps will fit within the tutorial time.}
        \item[Burn In Percentage:]{Burn-In percentage used for analyzing the log files, leave at the default.}
        \item[Pre Burnin:]{Number of samples that are discarded for the first step, but not the others. Change to 0.}
        \item[Do Not Run:]{Create the necessary XML files and exit, useful for running on clusters. Leave off.}
